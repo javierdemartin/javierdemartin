@@ -1,7 +1,7 @@
 ---
 title: Neural Bikes is Now Available for Madrid
 author: Javier de Martín
-date: 2019-11-24
+date: 2019-11-23
 published: true
 ---
 
