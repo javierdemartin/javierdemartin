@@ -9,32 +9,11 @@ var util = require("util")
 var path = require("path")
 var ejs = require("ejs")
 
-var CloudKit = require('./cloudkit.js')
-
 const frontmatter = require('frontmatter');
 const marked = require('marked');
 
 const Bearer = require('@bearer/node-agent')
 Bearer.init({ secretKey: 'sk_production_XlAJqg_Jp0FdO0R9kZWp5B0LzwECnrfm' })
-
-var stations = [];
-var total = [];
-var datos = [];
-var lista_estaciones = [];
-var lat = undefined;
-var lng = undefined;
-var zoom = undefined;
-var data = undefined;
-
-let license_message = "Free to use and create things with. If you find it useful, please consider donating to support the development of the project."
-let donationLink = 'https://ko-fi.com/javierdemartin';
-
-var apiToken = "4747c89304762c4f4c754ed9c15ecfdc02b89aa2006a85f46c109414f5307025"
-
-var centerLatitude = 0.0; 
-var centerLongitude = 0.0; 
-var dataToEjsView = {}
-var stationIdDict = {};
 
 app.use(express.static(path.join(__dirname, '../')));
 app.set('views', path.join(__dirname, '../'));
@@ -44,522 +23,12 @@ app.set('view engine','ejs');
 
 app.get('/', (req, res) => {
 
-	getIpInfo(req)
-
-
 	const jsonFile = path.join(__dirname, '../resources/now.json')
 
 	var raw = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
 
 	res.render('views/index.ejs', {data: raw})
-
 })
-
-
-app.get('/bicis/privacy', (req, res) => {
-
-	getIpInfo(req)
-
-	const fileFolder = path.join(__dirname, '../texts/privacy.md');
-
-	var raw = fs.readFileSync(fileFolder, 'utf8');
-
-			const { data, content } = frontmatter(raw);
-										
-			var aux = frontmatter(raw);
-
-			const markdown = ejs.render(content, data);
-			const html = marked.parse(markdown);
-
-			res.render('views/bicis/privacy', {
-			body: html
-		  })
-
-})
-
-app.get('/bicis', (req, res) => {
-	getIpInfo(req)
-	res.render('views/select-city')
-})
-
-// MARK: API
-
-app.get('/api/v1/all/*/*', (req, res) => {
-
-		getIpInfo(req)
-
-	let currentUrl = 'http://' + req.headers.host + req.originalUrl.replace("/all/", "/today/")
-	let predictionUrl = 'http://' + req.headers.host + req.originalUrl.replace("/all/", "/prediction/")
-
-	// Add the query for the prediction and the availability endpoints
-	// to an array of Promises
-	var promises = [];
-
-	promises.push(new Promise(function(resolve, reject) {
-
-		request.get({
-			url: currentUrl,
-			json: true,
-			headers: {'User-Agent': 'request'}
-		}, (err, res, data) => {
-			if (err) {
-				console.log('Error:', err);
-			} else if (res.statusCode !== 200) {
-				console.log('Status:', res.statusCode);
-			} else {
-				// data is already parsed as JSON:
-				resolve(data)
-			}
-		});
-
-	}))
-
-	promises.push(new Promise(function(resolve, reject) {
-
-		request.get({
-			url: predictionUrl,
-			json: true,
-			headers: {'User-Agent': 'request'}
-		}, (err, res, data) => {
-			if (err) {
-				console.log('Error:', err);
-			} else if (res.statusCode !== 200) {
-				console.log('Status:', res.statusCode);
-			} else {
-				// data is already parsed as JSON:
-				resolve(data)
-			}
-		});
-	}))
-
-	// When both endpoints have finished their tasks start format the data for the new API &
-	// calculate the statistics
-	Promise.all(promises).then(data => {
-
-		var meanArrayOfIntervals = []
-
-		var i,j,chunk = 3;
-
-		let predictionArray = data[1]['values']
-		// let availabilityArray = 
-
-		// Divide the prediction array in 30' intervals and calculate the median of each interval
-		for (i=0,j=Object.values(predictionArray).length; i<j; i+=chunk) {
-			meanArrayOfIntervals.push(median(Object.values(predictionArray).slice(i,i+chunk)))
-		}
-
-		var discharges = []
-		var refills = []		
-
-		// Define a baseline mean value that will trigger the event detection
-		let trigger = parseInt(Math.max.apply(Math, Object.values(predictionArray)) * 0.35, 10)
-
-		for (i=0; i < meanArrayOfIntervals.length - 1; i++) {
-
-			// Generate the string representing the time interval in which the event
-			// has been detected
-			if (i % 2 == 0) {
-				currentTime = i/2 + ":00"
-			} else if ((i+1) % 2 == 0) {
-				currentTime = parseInt(i/2,10) + ":30"
-			}
-
-			if (((meanArrayOfIntervals[i] - meanArrayOfIntervals[i+1]) < 0) && (Math.abs(meanArrayOfIntervals[i] - meanArrayOfIntervals[i+1])) > trigger) {
-				refills.push(currentTime)
-			} else if (((meanArrayOfIntervals[i] - meanArrayOfIntervals[i+1]) > 0) && (Math.abs(meanArrayOfIntervals[i] - meanArrayOfIntervals[i+1])) > trigger) {
-				discharges.push(currentTime)
-			}
-		}
-
-		var datetime = new Date();
-
-		var payload = {};
-		payload['values'] = {};
-		payload['values']['today'] = data[0].values;
-		payload['values']['prediction'] = data[1].values;
-		payload['refill'] = refills
-		payload['discharges'] = discharges
-		payload['donate'] = donationLink
-		payload['license'] = license_message
-		payload['last_updated'] = datetime
-
-	    res.header('Access-Control-Allow-Origin', '*');
-
-		res.json(payload)
-	})
-})
-
-function median(values){
-  if(values.length ===0) return 0;
-
-  values.sort(function(a,b){
-    return a-b;
-  });
-
-  var half = Math.floor(values.length / 2);
-
-  if (values.length % 2)
-    return values[half];
-
-  return (values[half - 1] + values[half]) / 2.0;
-}
-
-app.get('/api/v1/:param/*/*', (req, res) => {
-
-	getIpInfo(req)
-
-	let city = req.params[0].toLowerCase()
-	let station = req.params[1]//.toUpperCase()
-
-	const apiEndpoints = {"today": "Today", "prediction": "Prediction"}
-
-	var addQuery = ""
-
-	if (req.params.param == "today") {
-		addQuery = "_TODAY"
-	}
-
-	request.post('https://api.apple-cloudkit.com/database/1/iCloud.com.javierdemartin.bici/production/public/records/query?ckAPIToken=' + apiToken, {
-		json: {
-			"zoneID": { "zoneName": "_defaultZone"},
-			"query": {
-			"recordType": apiEndpoints[req.params.param],
-			"filterBy": [
-				{
-				"systemFieldName": "recordName",
-				"comparator": "EQUALS", 
-				"fieldValue": { 
-					"value": { 
-						"recordName": station + addQuery
-					}
-				}
-				}]
-			}
-		}
-	}, (error, response, body) => {
-	  
-		if (error) {
-			console.error(error)
-			return
-		}
-
-		// No records found, station is new and predictions have not been created
-		if (body['records'].length > 0) {
-			var b64 = body['records'][0]['fields']['values']['value']
-			var decoded_data = new Buffer.from(b64, 'base64').toString('utf-8')
-			decoded_data = JSON.parse(decoded_data)
-		} else {
-			decoded_data = {};
-		}
-
-		
-		
-		var datetime = new Date();
-		
-		var payload = {};
-		
-		payload['values'] = decoded_data;
-		payload['donate'] = donationLink
-		payload['license'] = license_message
-		payload['last_updated'] = datetime
-
-	    res.header('Access-Control-Allow-Origin', '*');
-		res.json(payload)
-	})
-})
-
-
-
-var apiPreLogIn = function(city) {
-	
-	const options = {
-		url: 'https://openapi.emtmadrid.es/v1/mobilitylabs/user/login/', 
-		method: 'GET',
-		headers: {
-			'email': 'javierdemartin@me.com',
-		'password': 'zXF2AbQt7L6#',
-		'X-ApiKey': '76eb9ed5-25b6-4e57-a905-71d4ac2ecdf2',
-		'X-ClientId': 'f64bb631-8b03-426d-a1e3-9939a571003a'
-		}
-	};
-
-	return new Promise(function(resolve, reject) {
-	
-		if (city !== "madrid") {
-			resolve()
-
-		} else {
-			request.get(options, (error, res, body) => {
-		
-			if (error) {
-				console.error(error)
-				reject(error)
-
-			}
-						
-			if (body) {
-
-				let accessToken = JSON.parse(body)['data'][0]['accessToken']
-				
-				resolve(accessToken)
-			
-			} else {
-				reject()
-
-			}
-		})
-		}	
-	})
-}
-
-app.get('/api/v1/today/*', (req, res) => {
-
-		getIpInfo(req)
-
-	let city = req.params[0].toLowerCase()
-	
-	var gotStationsList = []
-	
-	// render `home.ejs` with the list of posts
-	let url = cityParsers[city]
-	
-	apiPreLogIn(city).then(accessToken => {
-		
-		var options = {
-    		url: url, 
-    		method: 'GET',
-    		json:true
-    	}
-    
-		if (city === 'madrid') {
-		
-			options = {
-    		url: url, 
-    		method: 'GET',
-    		json:true,
-    		headers: {'accessToken': accessToken}
-    		}
-		}
-		
-		request(options, async function (error, response, body) {
-
-			var stationsList = []
-			var stationsDict = []
-					
-			if (city === "bilbao") {
-				stationsList = body.countries[0].cities[0].places
-			
-				for(i = 0; i < stationsList.length; i++) {
-			
-					var name = stationsList[i].name.replace(/^\d\d-/g, '')
-					
-					console.log(stationsList[i])
-			
-					gotStationsList.push(name)
-					stationsDict[name] = name
-				}			
-			
-			} else if (city === "madrid") {
-		
-				stationsList = body["data"]
-			
-				for (i = 0; i < stationsList.length; i++) {
-
-					gotStationsList.push(stationsList[i]["name"].replace(/^\d\d-/g, ''))
-				
-					stationsDict[String(stationsList[i]["name"].replace(/^\d\d-/g, ''))] = stationsList[i]["id"]
-				}
-			} else if (city === "newyork") {
-		
-				stationsList = body["data"]["stations"]
-		
-				for (i = 0; i < stationsList.length; i++) {
-
-					gotStationsList.push(stationsList[i]["name"].replace(/^\d\d-/g, ''))
-			
-					stationsDict[String(stationsList[i]["name"].replace(/^\d\d-/g, ''))] = stationsList[i]["station_id"]
-				}
-			}
-		
-
-			var promises = [];
-
-			gotStationsList.forEach(async (item) => {
-				// Queries for the ID
-				promises.push(queryForStation("Today", stationsDict[item], item))
-
-			})
-		  
-			var datetime = new Date();
-		
-			Promise.all(promises)
-			  .then(data => {
-			
-				var payload = {};
-				payload['values'] = data;
-				payload['donate'] = donationLink;
-				payload['license'] = license_message
-				payload['last_updated'] = datetime
-				
-				res.header('Access-Control-Allow-Origin', '*');
-				res.json(payload);
-			  }).catch(err => {
-				console.log(err)		  
-			  })
-		})
-	})
-})
-
-app.get('/api/v1/prediction/*', (req, res) => {
-
-		getIpInfo(req)
-
-	let city = req.params[0].toLowerCase()
-	
-	var gotStationsList = []
-	
-	// render `home.ejs` with the list of posts
-	let url = cityParsers[city]
-	
-	apiPreLogIn(city).then(accessToken => {
-		
-		var options = {
-    		url: url, 
-    		method: 'GET',
-    		json:true
-    		}
-    
-		if (city === 'madrid') {
-		
-			options = {
-    		url: url, 
-    		method: 'GET',
-    		json:true,
-    		headers: {'accessToken': accessToken}
-    		}
-		}
-    
-	request(options, async function (error, response, body) {
-
-		var stationsList = []
-		var stationsDict = []
-		
-		
-		if (city === "bilbao") {
-			stationsList = body.countries[0].cities[0].places
-			
-			for(i = 0; i < stationsList.length; i++) {
-			
-				var name = stationsList[i].name.replace(/(^\d\d-)/g, '')
-			
-				gotStationsList.push(name)
-				stationsDict[name] = name
-			}			
-		} else if (city === "madrid") {
-		
-			stationsList = body["data"]
-		
-			for (i = 0; i < stationsList.length; i++) {
-
-				gotStationsList.push(stationsList[i]["name"].replace(/^\d\d-/g, ''))
-			
-				stationsDict[String(stationsList[i]["name"].replace(/^\d\d-/g, ''))] = stationsList[i]["id"]
-			}
-		} else if (city === "newyork") {
-		
-			stationsList = body["network"]["stations"]
-		
-			for (i = 0; i < stationsList.length; i++) {
-
-				gotStationsList.push(stationsList[i]["name"].replace(/^\d\d-/g, ''))
-			
-				stationsDict[String(stationsList[i]["name"].replace(/^\d\d-/g, ''))] = stationsList[i]["id"]
-			}
-		}
-		
-
-		var promises = [];
-
-		   gotStationsList.forEach(async (item) => {
-
- 			// Queries for the ID
-			promises.push(queryForStation("Prediction", stationsDict[item], item))
-			
-		  })
-		  
-		var datetime = new Date();
-		
-		Promise.all(promises)
-		  .then(data => {
-		  	
-			var payload = {};
-			payload['values'] = data;
-			payload['donate'] = donationLink;
-			payload['license'] = license_message
-			payload['last_updated'] = datetime
-			
-			res.header('Access-Control-Allow-Origin', '*'); 
-			res.json(payload);
-		  }).catch(err => {
-			console.log(err)  
-		  })
-	})
-	})
-})
-
-var queryForStation = function(typeOfQuery, stationName, resolveName) {
-
-	getIpInfo(req)
-
-	let recordNameSuffix = ""
-	
-	if (typeOfQuery === "Today") {
-		recordNameSuffix += "_TODAY"
-	}
-
-	let promise = new Promise(function(resolve,reject){
-
-		request.post('https://api.apple-cloudkit.com/database/1/iCloud.com.javierdemartin.bici/production/public/records/query?ckAPIToken=' + apiToken, {
-			json: {
-				"zoneID": { "zoneName": "_defaultZone"},
-				"query": {
-				"recordType": typeOfQuery,
-				"filterBy": [
-					{
-					"systemFieldName": "recordName",
-					"comparator": "EQUALS", 
-					"fieldValue": { 
-						"value": { 
-							"recordName": stationName + recordNameSuffix
-						}
-					}
-					}]
-				}
-			}
-		}, (error, res, body) => {
-		  
-			if (error) {
-				console.error(error)
-				return
-			}			
-
-			if ((body['records'][0])) {
-				var b64 = body['records'][0]['fields']['values']['value']
-				var decoded_data = new Buffer.from(b64, 'base64').toString('utf-8')
-				
-				var toDeliver = {}
-				toDeliver[resolveName] = JSON.parse(decoded_data);
-		
-				resolve(toDeliver)
-			} else {
-				resolve({})
-			}
-		})
-	})
-
-
-	return promise
-}
 
 function getDirectories(path) {
   return fs.readdirSync(path).filter(function (file) {
@@ -588,9 +57,6 @@ var getBlogFloderStructure = function(filePath, callback) {
 			lista[year] = {}
 			
 			months.forEach(function(month) {
-		
-			
-				console.log(getFilesIn(filePath + "/" + year + "/" + month))
 				
 				lista[year][month] = getFilesIn(filePath + "/" + year + "/" + month)
 			})
@@ -601,8 +67,6 @@ var getBlogFloderStructure = function(filePath, callback) {
 
 
 app.get('/blog', (req, res) => {
-
-	getIpInfo(req)
 
 	const testFolder = path.join(__dirname, '../_posts')
 	
@@ -617,8 +81,6 @@ app.get('/blog', (req, res) => {
 });
 
 app.get('/blog/*', (req, res) => {
-
-	getIpInfo(req)
 
 	const testFolder = path.join(__dirname, '../_posts')
 				
@@ -640,166 +102,17 @@ app.get('/blog/*', (req, res) => {
 	res.render('views/post', {data: data, content: html})
 })
 
-let cityParsers = {
-	"madrid": "https://openapi.emtmadrid.es/v1/transport/bicimad/stations/",
-	"bilbao": "https://nextbike.net/maps/nextbike-official.json?city=532",
-	"newyork": "https://gbfs.citibikenyc.com/gbfs/en/station_information.json"
-}
-
-var getIpInfo = function(req) {
-
-	var ip = req.headers['x-forwarded-for'] || 
-	 req.connection.remoteAddress || 
-	 req.socket.remoteAddress ||
-	 (req.connection.socket ? req.connection.socket.remoteAddress : null);
-
-
-	url = 'https://freegeoip.app/json/' + ip
-
-	request.get(url, (error, response, body) => {
-	
-		if (!error && response.statusCode == 200) {
-			ip_info = JSON.parse(body)
-			
-			var latitude = ip_info['latitude']
-			var longitude = ip_info['longitude']
-			
-			var log = req.url  + " " + ip_info['country_name'] + " " + ip_info['city'] 
-			
-			if (latitude !== 0) {
-				log += " (" + ip_info['latitude'] + "," + ip_info['longitude'] + ")"
-			}
-	
-			console.log(log)
-		}
-	})	
-}
-
-app.get('/bicis/*', (req, res) => {
-
-	let city = req.params[0].toLowerCase()
-		
-	let urlToParse = cityParsers[city]
-	
-
-	
-	getIpInfo(req)
-		
-	apiPreLogIn(city).then(accessToken => {
-		
-		var options = {
-    		url: urlToParse, 
-    		method: 'GET',
-    		json:true
-    	}
-    
-		if (city === 'madrid') {
-			options = {
-				url: urlToParse, 
-				method: 'GET',
-				json:true,
-				headers: {'accessToken': accessToken}
-    		}    		
-		}
-	
-	request(options, async function (error, response, body) {
-			
-		if (city === "bilbao") {
-		
-			centerLatitude = body['countries'][0]['lat']
-			centerLongitude = body['countries'][0]['lng']
-			
-			let stations = body['countries'][0]['cities'][0]['places']
-						
-			for (i = 0; i< stations.length; i++) { 
-				dataToEjsView[stations[i]["name"].replace(/(^\d\d-)/g, '')] = {"lat": stations[i]["lat"], "lng": stations[i]["lng"], "free_bikes": stations[i]["bikes"],  "id": stations[i]["uid"],'total_docks': stations[i]['bike_racks']}
-				stationIdDict[stations[i]["name"]] =  stations[i]["id"]
-			}
-			
-		} else if (city === "madrid") {
-			
-			let stations = body["data"]
-
-			centerLatitude =  40.4165000
-			centerLongitude = -3.7025600
-									
-			for (i = 0; i < stations.length; i++) { 
-				
-				dataToEjsView[stations[i]["name"]] = {"lat": stations[i]["geometry"]["coordinates"][1], "lng": stations[i]["geometry"]["coordinates"][0], "id": stations[i]["id"], "free_bikes": stations[i]["dock_bikes"], 'total_docks': stations[i]['total_bases']}
-			}
-		} else if (city === "newyork") {
-		
-
-			let stations = body['data']['stations']
-			centerLatitude = 40.758896 
-			centerLongitude = -73.985130
-			
-			for (i = 0; i< stations.length; i++) { 
-			
-				dataToEjsView[stations[i]["name"]] = {"lat": stations[i]["lat"], "lng": stations[i]["lon"], "id": stations[i]["station_id"], "free_bikes": stations[i]["availableBikes"], 'total_docks': stations[i]['capacity']}
-								
-				stationIdDict[stations[i]["name"]] =  stations[i]["station_id"]
-			}
-		}
-						
-		var resultTodayDict = {};
-		var resultPredictionDict = {};
-
-		var promiseArray = [];
-
-
-				var payload = { 
-		lat: centerLatitude, 
-		lng: centerLongitude, 
-		zoom: 13, 
-		city: city,
-		data: dataToEjsView, 
-		prediction: {}, 
-		actual: {},
-		dict: {},
-		available: [], 
-		total: 0}
-	
-		res.render('views/home', payload)		
-	})
-	
-	})
-})
-
-/**
- * Returns the week number for this date.  dowOffset is the day of week the week
- * "starts" on for your locale - it can be from 0 to 6. If dowOffset is 1 (Monday),
- * the week returned is the ISO 8601 week number.
- * @param int dowOffset
- * @return int
- */
-Date.prototype.getWeek = function (dowOffset) {
-/*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
-
-    dowOffset = typeof(dowOffset) == 'int' ? dowOffset : 0; //default dowOffset to zero
-    var newYear = new Date(this.getFullYear(),0,1);
-    var day = newYear.getDay() - dowOffset; //the day of week the year begins on
-    day = (day >= 0 ? day : day + 7);
-    var daynum = Math.floor((this.getTime() - newYear.getTime() - 
-    (this.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/86400000) + 1;
-    var weeknum;
-    //if the year starts before the middle of a week
-    if(day < 4) {
-        weeknum = Math.floor((daynum+day-1)/7) + 1;
-        if(weeknum > 52) {
-            nYear = new Date(this.getFullYear() + 1,0,1);
-            nday = nYear.getDay() - dowOffset;
-            nday = nday >= 0 ? nday : nday + 7;
-            /*if the next year starts before the middle of
-              the week, it is week #1 of that year*/
-            weeknum = nday < 4 ? 1 : 53;
-        }
+Date.prototype.getWeek = function () {
+    var target  = new Date(this.valueOf());
+    var dayNr   = (this.getDay() + 6) % 7;
+    target.setDate(target.getDate() - dayNr + 3);
+    var firstThursday = target.valueOf();
+    target.setMonth(0, 1);
+    if (target.getDay() != 4) {
+        target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
     }
-    else {
-        weeknum = Math.floor((daynum+day-1)/7);
-    }
-    return weeknum;
-};
+    return 1 + Math.ceil((firstThursday - target) / 604800000);
+}
 
 ////////////////////////////
 
@@ -835,6 +148,11 @@ var statistics = {
 // var Airtable = require('airtable');
 // var base = new Airtable({apiKey: process.env.airtable_api_key}).base('appZ1mj1OPiwONMYU');
 
+filteredRecs = []
+
+var weekGraph = {}
+var maxWeeklyDistance = -1.0
+
 var Airtable = require('airtable');
 var base = new Airtable({apiKey: "keyBiLKFwcjErb7if"}).base('appZ1mj1OPiwONMYU');
 
@@ -860,6 +178,10 @@ app.get('/runs', (req, res) => {
 			}).eachPage(function page(records, fetchNextPage) {
 
 				fetchNextPage();
+
+				records.forEach(function(rec) {
+					rec.fields.duration = toHHMMSS(rec.fields.duration)
+				})
 			
 				resolve(records)
 
@@ -880,7 +202,7 @@ app.get('/runs', (req, res) => {
 						sort: [
         {field: 'Distance', direction: 'desc'}
         ],
-			fields: ['Model', 'Distance', 'Start', 'Usage']
+			fields: ['Model', 'Distance', 'Start', 'Usage', 'End']
 			}).eachPage(function page(records, fetchNextPage) {
 
 				fetchNextPage();
@@ -907,7 +229,6 @@ app.get('/runs', (req, res) => {
 
 			}).eachPage(function page(records, fetchNextPage) {
 			
-			
 				records.forEach(function(rec) {		
 					
 					if (typeof(rec.fields.Pace) === 'number') {
@@ -932,23 +253,13 @@ app.get('/runs', (req, res) => {
 		});
 
 	}))
-		
 	
-	filteredRecs = []
-	
-	var weekGraph = {}
-	var maxWeeklyDistance = -1.0
-	
-	// Total statistics
 	promises.push(new Promise(function(resolve, reject) {	
 	
 			var date = new Date(new Date().getFullYear(),0,1,1);
-
-	console.log(date)
 	
 		base('Run').select({
 			maxRecords: 3000,
-// 			filterByFormula: `{Date} >= "${date}"`,
 			sort: [
         {field: 'Date', direction: 'desc'}
         ],
@@ -968,8 +279,7 @@ app.get('/runs', (req, res) => {
 		
 			if (err) { console.error(err); return; }
 			
-			// Graphs
-			// ************************************************************************
+			const maxWidth = 20;
 			
 			var startDate = new Date(new Date().getFullYear(),0,1,1);
 			var thisYearsRecords = filterRecordsBetween(filteredRecs, startDate, new Date().getTime());
@@ -977,8 +287,6 @@ app.get('/runs', (req, res) => {
 			thisYearsRecords.forEach(function(rec) {
 			
 				const currentWeekNumber = (new Date(rec.Date)).getWeek()
-			
-				console.log((rec.Date) + " - " + currentWeekNumber)
 				
 				if (currentWeekNumber in weekGraph) {
 
@@ -995,9 +303,12 @@ app.get('/runs', (req, res) => {
 			})
 			
 
-			
-			const maxWidth = 20;
-
+			// Add missing weeks
+			for(i = 1; i < (new Date()).getWeek(); i++) {
+				if (!(i in weekGraph)) {
+					weekGraph[i] = {"distance": 0.0, "text":"░░░░░░░░░░░░░░░░░░░░"}
+				}
+			}
 			
 			Object.keys(weekGraph).forEach(function(key) {
 			
@@ -1012,12 +323,8 @@ app.get('/runs', (req, res) => {
 					}
 				}	
 				
-				weekGraph[key].text = goal_text
-				
+				weekGraph[key].text = goal_text	
 			})
-
-			console.log(weekGraph)
-			console.log(maxWeeklyDistance)
 
 			// ************************************************************************
 			
@@ -1120,7 +427,6 @@ app.get('/runs', (req, res) => {
 		res.render('views/runs.ejs', {data: raw})
 	})
 })
-
 
 module.exports = app
 

@@ -9,18 +9,11 @@
 
 	<div class="inner">
 		<div class="header">
-			<div class="title"><h2>I like to run</h2></div>
-			<p>I'm Javi, you probably discovered this because of... reasons. I love spending time on my feet, this is updated automatically whenever I run.</p>
+			<div class="title"><h2>Runs</h2></div>
+			<p>So, you've found this. I like spending time on my feet. Stalk responsibly. This is updated automatically whenever I run.</p>
 		</div>
-
-		
-
 		<div>
-		
-		<div id="goalProgress">
-			<span style="font-family:Arial;"><p><%- data.goal_distance_text %> <%- data.goal_percentage %>% of 2020km</p></span>
-			<span style="font-family:Arial;"><p><%- data.poy_text %> <%- data.poy %>% of 2020</p></span>
-		</div>
+
 			<div class="section" style="padding-top: 50px; padding-bottom: 3px; margin-bottom: 20px; border-bottom: 1px solid #C8CACA;">
 				Goals for this year
 				</div>
@@ -30,6 +23,7 @@
 			<li>Run 2020kms in 2020</li>
 			<li>Run <a href="https://www.everysinglestreet.com/why">every single street</a> in Bilbao</li>
 			<li>Run <a href="https://www.bilbao.eus/cs/Satellite?cid=3000076722&language=en&pagename=Bilbaonet%2FPage%2FBIO_contenidoFinal">Bilbao's Green Belt</a> <span class="passive">38 km / 1.400m+</span></li>
+			<li><s>Run a 100km week</s></li>
 			</ul>
 			</div>
 		</div>
@@ -71,15 +65,17 @@
 			</div>
 		
 		<div>
-		<details open >
-		<summary>Graphs</summary>
+		<details open>
+		<summary>Weekly distance graphs</summary>
 		
 		Current weekly accumulated weekly distance over the course of this year.
-		
-			<% Object.keys(data.weekGraph).forEach((run) => { %>
-				<% console.log(data.weekGraph[run]) %>
-				<span style="font-family:Arial;"><p>wk<%- ( "00" + run).slice(-2) %> <%- data.weekGraph[run].text %> <%- Math.floor(data.weekGraph[run].distance) %>km</p></span>
+		<div>
+			<% Object.keys(data.weekGraph).reverse().forEach((run) => { %>
+			<div id="distanceGraph">
+				<span style="font-family:Arial;"><p><span class="passive">wk<%- ( "00" + run).slice(-2) %></span> <%- data.weekGraph[run].text %> <%- Math.floor(data.weekGraph[run].distance) %>km</p></span>
+			</div>
 			<% }) %>
+			</div>
 		</details>
 		</div>
 		
@@ -132,10 +128,18 @@
 
 				<% Object.keys(data.shoes).forEach((shoe) => { %>
 
+						<!-- <% if ((new Date(data.shoes[shoe].fields.End)) < new Date()) { %>
+						<strike>
+						<% } %> -->
+
 						<div class="box a"><%- data.shoes[shoe].fields.Model %></div>
 						<div class="box a"><%- data.shoes[shoe].fields.Start %></div>
 						<div class="box a"><%- Math.floor(data.shoes[shoe].fields.Distance)%></div>
 						<div class="box a"><%- Math.floor(data.shoes[shoe].fields.Usage) %></div>
+
+						<!-- <% if ((new Date(data.shoes[shoe].fields.End)) < new Date()) { %>
+						</strike>
+						<% } %> -->
 
 				<% }) %>
 			</div>

@@ -6,7 +6,6 @@
 		"email": { "link": "mailto:javierdemartin@me.com", "description": ""},
 		"twitter": { "link": "https://twitter.com/javierdemartin", "description": ""},
 		"blog":{ "link": "/blog", "description": ""},
-		"runs": { "link": "/runs", "description": "My own Strava"},
-		"Neural.Bikes": { "link": "/bicis", "description": "Bike sharing predictions"}
+		"runs": { "link": "/runs", "description": "My own Strava"}
 	}
 }
