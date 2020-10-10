@@ -12,9 +12,6 @@ var ejs = require("ejs")
 const frontmatter = require('frontmatter');
 const marked = require('marked');
 
-const Bearer = require('@bearer/node-agent')
-Bearer.init({ secretKey: 'sk_production_XlAJqg_Jp0FdO0R9kZWp5B0LzwECnrfm' })
-
 app.use(express.static(path.join(__dirname, '../')));
 app.set('views', path.join(__dirname, '../'));
 app.engine('ejs', require('ejs').renderFile);
@@ -199,9 +196,9 @@ app.get('/runs', (req, res) => {
 		base('Shoes').select({
 			// Selecting the first 3 records in Monthly:
 			maxRecords: 100,
-						sort: [
-        {field: 'Distance', direction: 'desc'}
-        ],
+			sort: [
+        		{field: 'Distance', direction: 'desc'}
+        	],
 			fields: ['Model', 'Distance', 'Start', 'Usage', 'End']
 			}).eachPage(function page(records, fetchNextPage) {
 
@@ -256,14 +253,17 @@ app.get('/runs', (req, res) => {
 	
 	promises.push(new Promise(function(resolve, reject) {	
 	
-			var date = new Date(new Date().getFullYear(),0,1,1);
+		var date = new Date(new Date().getFullYear(),0,1,1);
+
+		filteredRecs = [];
+		weekGraph = {};
 	
 		base('Run').select({
-			maxRecords: 3000,
-			sort: [
-        {field: 'Date', direction: 'desc'}
-        ],
-			fields: ['Date', 'distance', 'duration', 'calories', 'Type', 'avghr', 'maxhr', 'rhr', 'vert', 'vo2max']
+				maxRecords: 3000,
+				sort: [
+					{field: 'Date', direction: 'desc'}
+				],
+				fields: ['Date', 'distance', 'duration', 'calories', 'Type', 'avghr', 'maxhr', 'rhr', 'vert', 'vo2max']
 			}).eachPage(function page(records, fetchNextPage) {
 			
 				records.filter(function(obj) {
@@ -430,4 +430,4 @@ app.get('/runs', (req, res) => {
 
 module.exports = app
 
-app.listen(3000)
+app.listen()
