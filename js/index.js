@@ -20,11 +20,26 @@ app.set('view engine','ejs');
 
 app.get('/', (req, res) => {
 
-	const jsonFile = path.join(__dirname, '../resources/now.json')
+	// const jsonFile = path.join(__dirname, '../resources/now.json')
 
-	var raw = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+	// var raw = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
 
-	res.render('views/index.ejs', {data: raw})
+	// res.render('views/index.ejs', {data: raw})
+
+	const testFolder = path.join(__dirname, '../resources/now.md')
+						
+	var raw = fs.readFileSync(testFolder, 'utf8');
+	
+	const { data, content } = frontmatter(raw);
+
+	console.log(content)
+		
+	var aux = frontmatter(raw);
+	
+	const markdown = ejs.render(content, data);
+	const html = marked.parse(markdown);
+	
+	res.render('views/index.ejs', { content: html })
 })
 
 function getDirectories(path) {
@@ -430,4 +445,4 @@ app.get('/runs', (req, res) => {
 
 module.exports = app
 
-app.listen()
+app.listen(3000)

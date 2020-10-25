@@ -1,6 +1,6 @@
 <html>
 <head>
-<title><%= data.title %></title>
+<title>Javier de Martín</title>
 <link href="/resources/styles.css" rel="stylesheet" type="text/css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Javier de Martín">
@@ -14,27 +14,8 @@
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
   <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
 </head>
- <body class="body">
+ <main>
+    <%- content %>
 
-<div class="inner">	 	 
-  <div class="header">
-    <div class="title">
-		<h2><%= data.name.toUpperCase() %></h2>
-    </div>
-
-<br>
-<span class="section"><%- data.description %></span>
-
-<div>
-<span><%- data.bio %></span>
-<% Object.keys(data.social_media).forEach(function(key){ %>
-<div class="section"><strong>▸ </strong><a href="<%- data.social_media[key].link %>"><strong><%- key %></strong></a> <span><%- data.social_media[key].description %></span></div>
-<% }); %>
-</div>
-
-</div>
-<p><a href='https://ko-fi.com/H2H814TXG'>No ads, no trackers you can support my projects on Ko-Fi!</a></p>
-</div>
-
-</body>
+</main>
 </html>
