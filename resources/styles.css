@@ -13,6 +13,25 @@ body {
   font-family:sans-serif
 }
 
+
+pre {
+
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  overflow-x: auto;
+  tab-size: 2;
+  background: black;
+  color: white;
+  padding: 5px;
+    line-height: 1.6;
+    overflow: auto;
+    font-size: 0.9em;
+    display: block;
+}
+code {
+  font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+  
+}
+
 @media (prefers-color-scheme: dark) {
   body {
   	color: white;
@@ -22,16 +41,16 @@ body {
   html {
 	background-color: black;
   }
-  
-  h1 {
-  	color: green;
-  }
-  
-  a {
+    
+  a, p {
     color:#f8f8f8
   }
 
-  pre {
+  p {
+    color: white;
+  }
+
+  /* pre {
     background: #0a0a0a;
     border: 1px solid #0a0a0a;
     border-left: 3px solid #398F9B;
@@ -45,7 +64,7 @@ body {
     padding: 1em 1.5em;
     display: block;
     word-wrap: break-word;
-  }
+  } */
 }
 
 .passive {
@@ -72,7 +91,7 @@ details > summary {
 @media (prefers-color-scheme: light) {
 
 
-  pre {
+  /* pre {
       background: #f4f4f4;
       border: 1px solid #ddd;
       border-left: 3px solid #398F9B;
@@ -87,7 +106,7 @@ details > summary {
       padding: 1em 1.5em;
       display: block;
       word-wrap: break-word;
-  }
+  } */
 
 }
 
@@ -108,15 +127,15 @@ html {
     text-align: left;
 }
 
-a {
-  color:#000
-}
+/* a {
+  color:#00
+} */
 
-code {
+/* code {
 /* background: hsl(220, 80%, 90%);  */
-    font-family: monospace;
+    /* font-family: monospace; */
 /*     font-size: 15px; */
-    }
+    } */
 
 
 img {
@@ -159,14 +178,11 @@ img {
   grid-template-columns: auto auto auto auto auto auto auto auto;
 }
 
-
 li{
   margin: 10px 0;
 }
 
 
 .box {
-
   padding: 3px;
-
 }
