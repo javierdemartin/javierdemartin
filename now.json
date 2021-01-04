@@ -23,6 +23,7 @@
 		{"src": "/blog/(.*)", "dest": "/js/index.js"},
 		{"src" : "/bicis/(.*)", "dest": "/js/index.js"},
 		{"src" : "/bicis", "dest": "/js/index.js"},
+		{"src" : "/singlet", "dest": "/js/index.js"},
 		{"src" : "/runs", "dest": "/js/index.js"},
 		{"src": "/cv", "dest": "/resources/Javier_de_Martin_resume.pdf"}
 	]

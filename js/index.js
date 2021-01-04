@@ -42,6 +42,30 @@ app.get('/', (req, res) => {
 	res.render('views/index.ejs', { content: html })
 })
 
+app.get('/singlet', (req, res) => {
+
+	// const jsonFile = path.join(__dirname, '../resources/now.json')
+
+	// var raw = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+
+	// res.render('views/index.ejs', {data: raw})
+
+	const testFolder = path.join(__dirname, '../resources/singlet.md')
+						
+	var raw = fs.readFileSync(testFolder, 'utf8');
+	
+	const { data, content } = frontmatter(raw);
+
+	console.log(content)
+		
+	var aux = frontmatter(raw);
+	
+	const markdown = ejs.render(content, data);
+	const html = marked.parse(markdown);
+	
+	res.render('views/index.ejs', { content: html })
+})
+
 function getDirectories(path) {
   return fs.readdirSync(path).filter(function (file) {
     return fs.statSync(path+'/'+file).isDirectory();
