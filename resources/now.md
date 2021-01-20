@@ -2,7 +2,7 @@
 
 Telecommunications Engineer turned iOS developer with an interest in Machine Learning. Currently looking for a new iOS role.
 
-Did things at [Blink Shell](https://blink.sh) & maintaining [Neural Bikes](https://neuralbike.app).
+Maintaining [Neural Bikes](https://neuralbike.app) to show bike sharing demand predictions using Machine Learning.
 
 Currently building [Singlet](/singlet) the best app to analyze your runs on your iPhone.
 

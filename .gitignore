@@ -1,4 +1,5 @@
 resources/*.pdf
+resources/*.zip
 */.DS_Store
 .DS_STORE
 yarn.lock
