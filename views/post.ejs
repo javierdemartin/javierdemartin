@@ -15,7 +15,10 @@
 	  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
 	</head>
 	<main>
-		<h1><%- data.title %></h1>
+	
+	 <%- include partials/header.ejs %>
+	
+		<h3><%- data.title %></h3>
 		<%- data.date %>
 		<%- content %>
 </main>

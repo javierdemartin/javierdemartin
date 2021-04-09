@@ -15,15 +15,17 @@
 </head>
 <main>
 
-	<h2>Blog</h2>
+	 <%- include partials/header.ejs %>
 	
-	<% Object.keys(posts).reverse().forEach((year) => { %>		  		
+	<% Object.keys(posts).reverse().forEach((year) => { %>	
+
 		<% Object.keys(posts[year]).reverse().forEach((month) => { %> 					
 			<span class="section" style="">
 				<%- year %> × <%- month %>
 			</span>
 
-			<% Object.values(posts[year][month]).reverse().forEach((post) => { %> 		    
+			<% Object.values(posts[year][month]).reverse().forEach((post) => { %> 	
+				<% console.log(post) %>
 				<a href="/blog/<%- year %>/<%- month %>/<%- post.replace(".md","") %>"><%- post.replace(".md","").replace(/_/g, " ") %></a></br></br>
 			<% }) %>				
 		<% }) %>					

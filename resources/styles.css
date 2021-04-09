@@ -10,7 +10,10 @@ main {
 
 body {
   overflow-y: scroll;
-  font-family:sans-serif
+  font-family:sans-serif;
+    background: rgba(255, 255, 255, 1);
+    padding: 3em 4em 5em;
+    word-wrap:break-word
 }
 
 
@@ -186,3 +189,120 @@ li{
 .box {
   padding: 3px;
 }
+
+@media screen and (max-width: 1060px) {
+    .margin, .margin.left, .margin.right {
+        position: relative;
+        display: block;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom:auto
+    }
+
+    .margin.right {
+        float:right
+    }
+
+    .margin.left {
+        text-align: left;
+        float:left
+    }
+
+    .wide, .wide.left, .wide.right {
+        width: 100%;
+        margin:0
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .margin {
+        width:40%
+    }
+
+    .margin.right {
+        padding-left:16px
+    }
+
+    .margin.left {
+        padding-right:16px
+    }
+}
+
+.clear {
+    width: 100%;
+    clear:both
+}
+
+.archive h2.margin, .archive h3.margin {
+    margin:0
+}
+
+.archive h2.margin.left {
+    left:-45%
+}
+
+@media screen and (max-width: 1200px) {
+    .container {
+        margin-left:140px
+    }
+}
+
+@media screen and (max-width: 1060px) {
+    .container {
+        margin:2em 16px 16px
+    }
+
+    .archive h2.margin.left {
+        left:auto
+    }
+}
+
+@media screen and (max-width: 1060px) {
+    .archive .margin {
+        display: block;
+        width:100%
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .index .margin {
+        display: block;
+        width:100%
+    }
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        padding:.4em
+    }
+
+    .container {
+        margin: 1em 0 2em;
+        padding-top: .5em;
+        border-top: 1px solid rgba(0, 0, 0, .1);
+        min-width:auto
+    }
+
+    input {
+        font-size:1em
+    }
+
+    input[type=text] {
+        min-width:200px
+    }
+
+    .nav {
+        float: none;
+        display: block;
+        margin: 0;
+        width:100%
+    }
+
+    .nav a {
+        margin: 0 1em 0 0;
+        color: #000
+    }
+}
+
+

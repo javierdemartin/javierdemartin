@@ -1,9 +1,5 @@
-## Javier de Martín
+Check out [Singlet](/singlet)!, the best app to analyze your runs on your iPhone.
 
-Telecommunications Engineer turned iOS developer with an interest in Machine Learning. Currently looking for a new iOS role.
+Built [Neural Bikes](https://neuralbike.app) to show bike sharing demand predictions using Machine Learning.
 
-Maintaining [Neural Bikes](https://neuralbike.app) to show bike sharing demand predictions using Machine Learning.
-
-Currently building [Singlet](/singlet) the best app to analyze your runs on your iPhone.
-
-[email](mailto:javierdemartin@me.com), [twitter](https://twitter.com/javierdemartin), [blog](/blog) & [runs](/runs)
+[email](mailto:javierdemartin@gmail.com), [twitter](https://twitter.com/javierdemartin), [blog](/blog), [GitHub](https://github.com/javierdemartin) & [coffee](/coffee).
