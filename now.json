@@ -15,6 +15,7 @@
 		{"src": "/blog/(.*)", "dest": "/js/index.js"},
 		{"src" : "/singlet", "dest": "/js/index.js"},
 		{"src" : "/coffee", "dest": "/js/index.js"},
+		{"src" : "/swift", "dest": "/js/index.js"},
 		{"src" : "/running", "dest": "/js/index.js"},
 		{"src" : "/cafe", "dest": "/js/index.js"},
 		{"src": "/cv", "dest": "/resources/Javier_de_Martin_resume.pdf"}

@@ -84,6 +84,24 @@ app.get('/coffee', (req, res) => {
 	res.render('views/index.ejs', { content: html })
 })
 
+app.get('/swift', (req, res) => {
+
+	const testFolder = path.join(__dirname, '../resources/swift.md')
+						
+	var raw = fs.readFileSync(testFolder, 'utf8');
+	
+	const { data, content } = frontmatter(raw);
+
+	console.log(content)
+		
+	var aux = frontmatter(raw);
+	
+	const markdown = ejs.render(content, data);
+	const html = marked.parse(markdown);
+	
+	res.render('views/index.ejs', { content: html })
+})
+
 app.get('/running', (req, res) => {
 
 	const testFolder = path.join(__dirname, '../resources/running.md')
