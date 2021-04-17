@@ -2,11 +2,6 @@
 
 > This is a growing list of resources and tips I compile to make my developer life easier.
 
-
-
-
-
-
 -----------------------------------------
 
 ## AutoLayout
@@ -115,6 +110,26 @@ Allows devices to communicate with each other without the need for a central ser
 
 [Reachability.swift](https://developer.apple.com/library/archive/samplecode/Reachability/Introduction/Intro.html) helps you deal with how "reachable" internet is at a given time.
 
+### URLSession
+
+### Network.framework
+
+### Low Data mode
+
+It's an explicit **user preference** to minimize data usage. Background app refresh is disabled and discretionary tasks should be deferred. Your application should implement specific policies that react to these changes.
+
+How can you implement this?
+
+* If your app is image-heavy reduce the quality of the images.
+* Reduce pre-fetching. Avoid fetching resources taht users won't need
+* Synchronize less often
+* Mark background tasks as discretionary, some of them might not need to be executed immediately.
+
+
+```swift
+allowsConstrainedNetworkAccess = false
+```
+
 ### Time Profiler
 
 A common use is to detect under-performing functions that might be blocking the main thread.
@@ -190,6 +205,13 @@ app.launch()
 ## Universal Links
 
 They tie the content in your app to the content on a website. Once it's configured iOS will be able to launch your app when a user taps alink somewhere, rather than opening our site in Safari.
+
+## Widgets
+
+Debugging certain sizes of a widget
+
+- From the widget's Xcode scheme add an environment variable for `_XCWidgetFamily`.
+- Set the value to `small`, `medium` or `large` and the widget will boot to that size.
 
 ## Xcode
 

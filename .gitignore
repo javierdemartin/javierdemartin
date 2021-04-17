@@ -4,7 +4,6 @@ resources/*.zip
 .DS_STORE
 yarn.lock
 node_modules/
-
 .now
 .vercel
 package-lock.json

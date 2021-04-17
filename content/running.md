@@ -1,4 +1,7 @@
-# Running
+---
+title: "Running"
+date: "2020-10-01"
+---
 
 Mantras and things I look when planning my training.
 

@@ -1,6 +1,10 @@
+---
+title: "Coffee"
+date: "2020-10-01"
+---
+
 My randomly and always incomplete list of coffee places I have been so far and I've loved.
 
---------
 
 **Bihotz Café**
 

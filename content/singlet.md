@@ -1,6 +1,11 @@
+---
+title: "Singlet"
+date: "2020-10-01"
+---
+
 
 <div style="text-align:center">
- 	<img src="resources/singlet_promo.png" style="width:100%;"/>
+ 	<img src="/singlet/singlet_promo.png" style="width:100%;"/>
  </div>
 
 Singlet is the running log you need to keep track of your progress as a runner. That's it, that's what you need to know.
@@ -9,11 +14,11 @@ Apple Watches, Garmins, Polars, even if you only use your phone. Every single so
  
 <div style="text-align:center">
  	<a href="https://apps.apple.com/us/app/id1545746941">
- 	<img src="resources/app_store.svg" />
+ 	<img src="../public/singlet/app_store.svg" />
  	</a>
  </div>
  
-[Press kit](resources/Singlet-Press-Kit.zip).
+[Press kit](../public/singlet/Singlet-Press-Kit.zip).
 
 Notable features:
 
