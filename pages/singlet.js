@@ -1,6 +1,4 @@
 import React from 'react'
-import matter from 'gray-matter'
-import ReactMarkdown from "react-markdown";
 import Layout from '../components/layout';
 import Image from 'next/image'
 import Link from 'next/link';
