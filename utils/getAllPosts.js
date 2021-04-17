@@ -5,10 +5,10 @@ function importAll(r) {
       .reverse()// .substr(1).replace(/\/index\.md$/, '')
       .map((fileName) => ({
         link: fileName.substr(1).replace('.md', ''),
-        title: fileName.substr(2).replace('.md', ''),
+        // Skip "./xxxx/"
+        title: fileName.substr(7).replace('.md', ''),
         module: r(fileName),
       }));
   }
   
-//   export default importAll(require.context('../pages/blog', true, /\.mdx$/));
 export default importAll(require.context('../pages/blog', true, /\.md$/));
