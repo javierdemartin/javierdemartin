@@ -6,8 +6,10 @@ body {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.4;
   /* font-size: 18px; */
-  font-size: 1rem;
+  font-size: 0.95em;
 }
+
+
 
 * {
   box-sizing: border-box;
@@ -25,4 +27,41 @@ a:hover {
 img {
   max-width: 100%;
   display: block;
+}
+
+h1:before {
+  content: "# ";
+  margin-left: -1em;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+h2:before {
+  content: "## ";
+  color: #0070f3;
+  text-decoration: none;
+}
+
+h3:before {
+  content: "### ";
+  color: #0070f3;
+  text-decoration: none;
+}
+
+h4:before {
+  content: "#### ";
+  color: #0070f3;
+  text-decoration: none;
+}
+
+h5:before {
+  content: "##### ";
+  color: #0070f3;
+  text-decoration: none;
+}
+
+h6:before {
+  content: "##### ";
+  color: #0070f3;
+  text-decoration: none;
 }

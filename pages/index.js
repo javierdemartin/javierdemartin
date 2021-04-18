@@ -17,6 +17,10 @@ export default function Home() {
 
         <p>Built <Link href="https://neuralbike.app"><a>Neural Bikes</a></Link> to show bike sharing demand predictions using Machine Learning.</p>
 
+        <p>I am compiling litle tips of <Link href="/swift">
+          <a>Swift</a>
+          </Link></p>
+
         <p>
           <Link href="https://twitter.com/javierdemartin">
           <a>Twitter</a>

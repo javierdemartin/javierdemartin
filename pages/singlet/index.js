@@ -1,5 +1,5 @@
 import React from 'react'
-import Layout from '../components/layout';
+import Layout from '../../components/layout';
 import Image from 'next/image'
 import Link from 'next/link';
 
@@ -15,7 +15,7 @@ function RunningTemplate({ content, data }) {
         <Image
               priority
               src="/singlet/singlet_promo.png"
-              height={1638}
+              height={1297}
               width={2010}
               layout="responsive"
         />

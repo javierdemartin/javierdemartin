@@ -1,7 +1,10 @@
 import React from 'react'
 import matter from 'gray-matter'
 import ReactMarkdown from "react-markdown";
-import Layout from '../components/layout';
+import Layout from '../../components/layout';
+
+
+{/* <ReactMarkdown source={postData.markdown} renderers={{ code: CodeBlock }} /> */}
 
 function RunningTemplate({ content, data }) {
   // This holds the data between `---` from the .md file
@@ -9,11 +12,11 @@ function RunningTemplate({ content, data }) {
 
   return (
     <Layout>
-      <h1>{frontmatter.title}</h1>
-      {/* <p>{content}</p> */}
-      <ReactMarkdown>
-          { content }
-          </ReactMarkdown>
+      {/* <h1>{frontmatter.title}</h1> */}
+
+    <ReactMarkdown>     
+        { content }
+    </ReactMarkdown>
     </Layout>
   )
 }
@@ -21,7 +24,7 @@ function RunningTemplate({ content, data }) {
 RunningTemplate.getInitialProps = async (context) => {
   
   // Import our .md file using the `slug` from the URL
-  const content = await import(`../content/running.md`)
+  const content = await import(`./swift.md`)
 
   // Parse .md data through `matter`
   const data = matter(content.default)

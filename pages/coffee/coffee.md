@@ -14,6 +14,8 @@ Calle Arechaga 6, Bilbao, Spain
 
 **Cokoon Café**
 
+![/cokoon.JPG](coffee/cokoon.JPG)
+
 Calle Iparaguirre, 5, Bilbao, Spain
 
 [Map](https://duckduckgo.com/?q=Cokooncaf%C3%A9&t=osx&ia=web&iaxm=maps&strict_bbox=0&bbox=43.265896805138155%2C-2.9317963014163837%2C43.245972106317936%2C-2.92064553930949&metatoken=0)

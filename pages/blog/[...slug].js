@@ -8,14 +8,11 @@ function PostTemplate({ content, data }) {
   // This holds the data between `---` from the .md file
   const frontmatter = data
 
-  console.log(frontmatter.date)
-
   return (
     <Layout>
        <h1>{frontmatter.title}</h1>
-       {/* <caption>{ frontmatter.date }</caption> */}
        
-       <ReactMarkdown>
+      <ReactMarkdown>
           { content }
           </ReactMarkdown>
     </Layout>
@@ -24,6 +21,7 @@ function PostTemplate({ content, data }) {
 
 PostTemplate.getInitialProps = async (context) => {
   const { slug } = context.query
+
   
   // Import our .md file using the `slug` from the URL
   // const content = await import(`../../pages/blog/${slug}.md`)

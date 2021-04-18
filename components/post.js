@@ -4,6 +4,10 @@ import Head from 'next/head';
 import hljs from 'highlight.js/lib/core';
 import PostHeader from 'components/postHeader';
 
+import hljs from 'highlight.js';
+import javascript from 'highlight.js/lib/languages/javascript';
+hljs.registerLanguage('javascript', javascript);
+
 function updateCodeSyntaxHighlighting() {
   document.querySelectorAll('pre code').forEach((block) => {
     // Chrome and Safari need re-highlighting on every post load
@@ -19,6 +23,7 @@ function BlogPost({ children, meta }) {
   return (
     <>
       <Head>
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.3.2/build/styles/default.min.css"></link>
         <title>
           {meta.title}
           {' '}
