@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import hljs from 'highlight.js/lib/core';
-import PostHeader from 'components/postHeader';
 
 import hljs from 'highlight.js';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -46,7 +45,6 @@ function BlogPost({ children, meta }) {
           name="twitter:image"
         />
       </Head>
-      {/* <PostHeader meta={meta} isBlogPost /> */}
       <article>{children}</article>
     </>
   );

@@ -61,14 +61,16 @@ func animateConstraints() {
 https://littlebitesofcocoa.com/76-background-fetch
 https://www.andyibanez.com/posts/modern-background-tasks-ios13/
 
-## Codable
+<details>
 
+ <summary>Codable </summary>
 Codable maps JSON into model types. Not only it can be used to work with JSON but it cna also decode a .plist file into Swift structs and vice versa.
 
 https://www.donnywals.com/an-introduction-to-working-with-codable-in-swift/
 https://www.donnywals.com/customizing-how-codable-objects-map-to-json-data/
 https://www.donnywals.com/writing-custom-json-encoding-and-decoding-logic/
 https://www.donnywals.com/splitting-a-json-object-into-an-enum-and-an-associated-object-with-codable/
+</details>
 
 ### Downloads
 
@@ -95,6 +97,8 @@ Closures themselves are copied because their captured data becomes shared amongs
 <!-- **Copies of closures** -->
 
 **Accidental strong references**
+
+https://www.jessesquires.com/blog/2021/04/05/why-swift-closures-are-not-equatable/
 
 ## CloudKit
 
@@ -198,6 +202,48 @@ dispatchafter
 ## Local Notifications
 
 **Local Notifications** a system notification without needing to implement a push server. Register the device to receive these notifictions under AppDelegate's `didFinishLaunchingWithOptions:` methos.
+
+## Remote Notifications
+
+[WWDC 2020 Session 10095](https://developer.apple.com/wwdc20/10095)
+
+Push notifications do not require your app to be in the foreground. They are delivered regardless of the app state and if necessary your application will be launched.
+
+* Alert notifications: Visible notifications that can be interacted with and display new information. Doesn't require the application to be in the foreground, can be delivered with the app in the background. The appearance can be customizable
+* Background notifications: Allow your app to fetch data in the background upon receiving a background notification. System will launch the app if necessary and will give you runtime to perform your update. There are some limitations as the system limits the number of times you can update your app per day. Updates won't be performed if the app is on a constrained state such as low battery. 
+
+**Set up remote push notifications**
+
+1. Register for remote notifications in [`application(_:didFinishLaunchingWithOptions:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622921-application#). Will register the device for APNS and will send a token. It will identify your device and can be targeted to send specific notifications.
+
+```swift
+UIApplication.shared.registerForRemoteNotifications()
+```
+
+2. Conform to [`UNUserNotificationCenterDelegate`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate#).
+3. Assign the `AppDelegate` as a delegate for the Notification Center. This will let your app be notified when an alert is received.
+
+```swift
+UNUserNotificationCenter.current().delegate = self
+```
+
+4. Once you've registered to receive remote notifications you will receive a delegate call on either these two methods: [`application(_:didFailToRegisterForRemoteNotificationsWithError:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622962-application#) or [`application(_:didRegisterForRemoteNotificationsWithDeviceToken:)`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622958-application#).
+5. If registration suceeds you need to send the token to your server so it's able to send notifications later on. The token is delivered as a `Data` object and it needs to be converted to a String.
+
+```swift
+let tokenComponents = token.map { data in String(format: "%02.2hhx", data) }
+let deviceTokenString = tokenComponents.string()
+```
+
+6. Ask for permission so your app is able to display notifications using [`requestAuthorization(options:completionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/1649527-requestauthorization#).
+
+Notifications being sent to a device have a JSON payload specifying how to render the notification.
+
+When a notification is being opened or interacted with [`userNotificationCenter(_:didReceive:withCompletionHandler:)`](https://developer.apple.com/documentation/usernotifications/unusernotificationcenterdelegate/1649501-usernotificationcenter#) will be called.
+
+
+
+
 
 ## Generics
 
@@ -399,6 +445,13 @@ func applicationDidEnterBackground(_ application: UIApplication) {
 }
 ```
 
+## UIKit
+
+### UIKit View Lifecycle
+
+* `viewDidLoad()` is called whenever we programatically create the interface. Performs additional initialization on views.
+* `loadView()` creates the view that the controller manages. **Should only be used when you programatically instantiate your view controllers**. When using Storyboards this is the method that will load your nib and attach it to the view but when instantiating ViewControllers manually all this method does is create an empty `UIView`.
+
 ## UI Testing
 
 Pass parameters into a UI Test so the device knows it's running a UI test.
@@ -429,3 +482,15 @@ https://www.swiftdevjournal.com/using-environment-variables-in-swift-apps/
 ### Keyboard Shortcuts
 
 * `Command + Shift + O`: Open a file inside Xcode. This will allow you to work faster when changing files without needing to reach from your mouse.
+
+## Resources
+
+These are a collection of blogs, links, books, videos that helped me learn different topics. Buying the books linked below from their respective authors help them contribute to the community.
+
+* Combine
+  * Joseph Heck's [Using Combine](https://heckj.github.io/swiftui-notes/) book
+  * Donny Wals' [Practical Combine](https://gumroad.com/l/practical-combine) book
+  * Daniel H Steinberg's [A Combine Kickstart](https://gumroad.com/l/combineKickstart)
+* Paul Hudson's [Hacking with Swift](https://www.hackingwithswift.com)
+* John Sundell's [Swift by Sundell](http://swiftbysundell.com)
+* Vincent Pradeilles' [YouTube channel](https://www.youtube.com/channel/UCjkoQk5fOk6lH-shlm53vlw)
