@@ -494,3 +494,4 @@ These are a collection of blogs, links, books, videos that helped me learn diffe
 * Paul Hudson's [Hacking with Swift](https://www.hackingwithswift.com)
 * John Sundell's [Swift by Sundell](http://swiftbysundell.com)
 * Vincent Pradeilles' [YouTube channel](https://www.youtube.com/channel/UCjkoQk5fOk6lH-shlm53vlw)
+* Objc.io's [App Architecture iOS Application Design Patterns in Swift](https://www.objc.io/books/app-architecture/) book

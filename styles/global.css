@@ -20,6 +20,44 @@ a {
   text-decoration: none;
 }
 
+header {
+/* 	background-color: red; */
+
+    border-bottom: 2px solid #d9d9d9;
+    margin-bottom: .75em;
+    min-height:30px
+}
+
+code {
+    background: none;
+    border-radius: 0;
+    border: none;
+    font-family: "SFMono-Regular", Menlo, Consolas, "Inconsolata", monospace;
+    font-size: 1em;
+    margin: 0;
+    padding: 0 5px;
+    background-color:#ededed;
+}
+
+pre {
+    -webkit-overflow-scrolling: touch;
+    font-family: "SFMono-Regular", Menlo, Consolas, "Inconsolata", monospace;
+    font-size: 1em;
+    margin: 0;
+    padding: 5px 10px !important;
+    overflow: auto;
+    max-height: 60em;
+    white-space: pre;
+    border:1px solid #ccc;
+    background-color:#f2f2f2;
+}
+
+pre code {
+    line-height: 1.75em;
+    padding:0 !important;
+    background-color:#f2f2f2;
+}
+
 a:hover {
   text-decoration: underline;
 }
@@ -30,38 +68,38 @@ img {
 }
 
 h1:before {
-  content: "# ";
+
   margin-left: -1em;
   color: #0070f3;
   text-decoration: none;
 }
 
 h2:before {
-  content: "## ";
+
   color: #0070f3;
   text-decoration: none;
 }
 
 h3:before {
-  content: "### ";
+
   color: #0070f3;
   text-decoration: none;
 }
 
 h4:before {
-  content: "#### ";
+
   color: #0070f3;
   text-decoration: none;
 }
 
 h5:before {
-  content: "##### ";
+
   color: #0070f3;
   text-decoration: none;
 }
 
 h6:before {
-  content: "##### ";
+
   color: #0070f3;
   text-decoration: none;
 }

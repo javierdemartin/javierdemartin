@@ -27,6 +27,28 @@ These experiences are mostly focused around the marathon distance.
 * Play mind games, 42 kilometers is a lot. Don't think about all the distance you have yet to cover. Divide it mentally in chunks of 5 or 10 kilometers. Your mind can easily be tricked. PIcture yourself on a familiar course or anywhere else. Dig deep.
 * Stick to the pacers or a group of runners for as much time as possible. Trying to be on pace for all that distance can drain you mentally.
 
+
+
+--------------------------
+
+* Longest run in a marathon and how many times should I goi over 30K?
+
+every body is dfferent, people can achieve great results topping at 35K for example. 
+Do far more longer runs that some plans prescribe. do at least 5 runs of 35K or longer. In some cases do one full marathon or at least the duration of the time you want to achieve.
+Parts of those runs have to be at marathon pace and others slower. Never do a full long run at marathon pace. This kind of volume helps not to fade at the end of the race. This helps your body recognize how it will behave at that distance or time. It's an unconfortable sensatino but better have it on a training run than on race day.
+
+* Easy running / recovery pace. Run at your own pace. There are more things to lose doing a recovery run faster than to gain from it. Do them at 70% of your max. You probably won't notice a performance improvement if you do them even slower than you're doing them now.
+
+* How to avoid slowing down in the latter stages of a marathon? Do more long runs. they prepare your body for what it's going to go through on a marathon. Another reason is not fueling enough carbohydrates. If you run out of carbohydrates your body is going to switch its energy source to fats and that is harder. You're going to spend more calories than you're going to get into your body.
+
+* Overall volume in a marathon
+
+* Motivation
+
+* Taper
+
+
 ## Links & Books
 
 * [fellrnr](https://fellrnr.com/wiki/Main_Page)
+* [Sweat Elite](https://www.sweatelite.co) & the [podcast](https://www.sweatelite.co/podcast/)

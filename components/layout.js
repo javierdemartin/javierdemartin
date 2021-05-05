@@ -7,7 +7,6 @@ import Link from 'next/link'
 import hljs from 'highlight.js';
 import javascript from 'highlight.js/lib/languages/javascript';
 hljs.registerLanguage('javascript', javascript);
-// hljs.highlightAll();
 
 
 const name = 'javierdemartin'
@@ -17,7 +16,6 @@ export default function Layout({ children, home }) {
   return (
     <div className={styles.container}>
       <Head>
-      <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.3.2/build/styles/default.min.css"></link>
         <link rel="icon" href="/favicon.ico" />
         <meta name="viewport" content="width=device-width"/>
         <meta
