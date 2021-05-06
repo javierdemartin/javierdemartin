@@ -9,10 +9,12 @@ body {
   font-size: 0.95em;
 }
 
-
-
 * {
   box-sizing: border-box;
+}
+
+hr {
+border-bottom: 1px solid #d9d9d9;
 }
 
 a {
@@ -21,11 +23,10 @@ a {
 }
 
 header {
-/* 	background-color: red; */
 
     border-bottom: 2px solid #d9d9d9;
-    margin-bottom: .75em;
-    min-height:30px
+/*     margin-bottom: .75em; */
+
 }
 
 code {
@@ -33,7 +34,7 @@ code {
     border-radius: 0;
     border: none;
     font-family: "SFMono-Regular", Menlo, Consolas, "Inconsolata", monospace;
-    font-size: 1em;
+    font-size: 0.9em;
     margin: 0;
     padding: 0 5px;
     background-color:#ededed;
@@ -42,7 +43,7 @@ code {
 pre {
     -webkit-overflow-scrolling: touch;
     font-family: "SFMono-Regular", Menlo, Consolas, "Inconsolata", monospace;
-    font-size: 1em;
+    font-size: 0.75em;
     margin: 0;
     padding: 5px 10px !important;
     overflow: auto;
@@ -68,8 +69,6 @@ img {
 }
 
 h1:before {
-
-  margin-left: -1em;
   color: #0070f3;
   text-decoration: none;
 }

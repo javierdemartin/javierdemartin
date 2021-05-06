@@ -151,22 +151,6 @@ Git `HEAD` is a reference to a commit object. Each `HEAD` is context dependent o
 
 ------------
 
-think of branches as contexts
-
-------------
-
-git rebase -i
-
-------------
-
-git hunk
-
-------------
-
-git revert
-
------------------
-
 **How to go back to a previous commit?** 
 
 * `git checkout <commit>` master ref is still pointing to the last commit. `HEAD` ref has been moved and now points to `<commit>`. Repo is now on a *detached `HEAD`* state.
@@ -174,28 +158,43 @@ git revert
 
 --------
 
-git stash
-
-------------
-
-git reflog
-
------------
-
-git bisect
-
----------- 
-
-git clean / trash
+You can use `git bisect` to find errors introduced in certain commits.
 
 -------- 
 
 **Rename a local branch**
 
+```
+git branch -m <old_name> <new_name>
+```
+
 ---------
 
-**Rename a branch that has been pushed to the remote**
+`git stash` temporarily shelves changes on your working copy and revers them from your working copy. **You can now switch branches**.
 
----------- 
+Reapply stashed changes with `git stash pop`. Reapply changes to your working copy and **keep the changes in your stash** with `git stash apply`. This is useful if you want to apply the same stashed changes to multiple branches.
 
-git stash pop
+You can have multiple stashes.
+
+```
+# They are simply saved as "WIP"
+git stash list
+```
+
+To save each stash in an identifiable manner use `save`.
+
+```
+git stash save "Some changes"
+```
+
+`git stash pop` will re-apply the most recent created stash, `stash@{0}`. To apply another one use its identifier `git stash pop stash@{XXX}`.
+
+View a `stash`diff with `git stash show`, pass the option `-p` to see the full diff.
+
+**Create a branch from your stash** by checking out a new branch based on the commit you created your stash from.
+
+```
+git stash branch <branch_name> stash@{XXX}
+```
+
+**Clean a specific `stash`** with `git stash drop stash@{XXX}` or even all of them with `git stash clear`.

@@ -11,7 +11,6 @@ export default function Blog() {
     <Layout>
 
         { postList.map((post) => (
-//             <div>
 			<div className={styles.postList}>
                 <Link href={`/blog${post.link}`}>
                 <a>{ post.title }</a>
